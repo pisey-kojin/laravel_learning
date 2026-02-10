@@ -1,0 +1,76 @@
+<!-- 
+    ＊extend: 親ビューを継承する（読み込み）
+    ＊およビュー名：layoutをしてい
+-->
+@extends('layout')
+
+<!--
+    ＊section：子ビューにsectionでデータを定義する
+    ＊セクション名：styleを指定
+    ＊用途：javascriptライブラリー「flatpickr」のスタイルシートを指定
+-->
+@section('styles')
+    @include('share/flatpickr/styles')
+@endsection
+    
+<!--
+    ＊section：子ビューにsectionでデータを定義する
+    ＊セクション名：contentを指定
+    ＊用途：タスクを編集するページのHTMLを表示する
+-->
+@section('content')
+    <div class="container">
+        <div class="row">
+            <div class="col col-md-offset-3 col-md-6">
+                <nav class="panel panel-default">
+                    <div class="panel-heading">タスクを編集する</div>
+                    <div class="panel-body">
+                        @if($errors->any())
+                        <div class="alert alert-danger">
+                            @foreach($errors->all() as $message)
+                                <p>{{ $message }}</p>
+                            @endforeach
+                        </div>
+                        @endif
+                        <form action="{{ route('tasks.edit', ['id' => $task->folder_id, 'task_id' => $task->id]) }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="title">タイトル</label>
+                                <input type="text" class="form-control" name="title" id="title" value="{{ old('title') ?? $task->title }}" />
+                            </div>
+                            <div class="form-group">
+                                <label for="status">状態</label>
+                                <select name="status" id="status" class="form-control">
+                                    @foreach(\App\Models\Task::STATUS as $key => $val)
+                                        <option value="{{ $key }}" {{ $key == old('status', $task->status) ? 'selected' : '' }}>
+                                            {{ $val['label'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="due_date">期限</label>
+                                <input type="text" class="form-control" name="due_date" id="due_date" value="{{ old('due_date') ?? $task->formatted_due_date }}" />
+                            </div>
+                            <div class="text-right">
+                                <button type="button" class="btn btn-secondary" onclick="window.location='{{ route('tasks.index', ['id' => $folder_id]) }}'">キャンセル</button>
+                                <button type="submit" class="btn btn-primary">保存</button>
+                            </div>
+                        </form>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+@endsection
+
+<!--
+    ＊section：子ビューで定義したデータを表示する
+    ＊セクション名：scriptsを指定
+    ＊目的：flatpickrによるカレンダー形式による日付選択
+    ＊用途：JavaScriptライブラリー「flatpicks」のインポート
+-->
+
+@section('script')
+    @include('share.flatpickr.scripts')
+@endsection
