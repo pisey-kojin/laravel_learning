@@ -1,8 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\FolderController;
+use App\Http\Controllers\HomeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +45,11 @@ Route::post('/folders/{id}/tasks/{task_id}/edit', [TaskController::class, 'edit'
 /* tasks delete page */
 Route::get('folders/{id}/tasks/{task_id}/delete', [TaskController::class, 'showDeleteForm'])->name("tasks.delete");
 Route::post('folders/{id}/tasks/{task_id}/delete', [TaskController::class, 'delete']);
+
+/* home page */
+Route::get('/', [HomeController::class, "index"])->name('home');
+
+/* Certification page (Registration, Login, Logout, Re-password) */
+Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
