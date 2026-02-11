@@ -35,7 +35,7 @@
                                 <input type="text" class="form-control" name="title" id="title" value = "{{ old('title') }}"/>
                             </div>
                             <div class="text-right">
-                                <button type="button" class="btn btn-secondary" onclick="window.location='{{ route('tasks.index', ['id' => $first_folder_id]) }}'">キャンセル</button>
+                                {{-- <button type="button" class="btn btn-secondary" onclick="window.location='{{ route('tasks.index', ['id' => $first_folder_id]) }}'">キャンセル</button> --}}
                                 <button type="submit" class="btn btn-primary">送信</button>
                             </div>
                         </form>

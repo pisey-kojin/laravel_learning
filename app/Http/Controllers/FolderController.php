@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Folder;
 use App\Http\Requests\CreateFolder;
 use App\Http\Requests\EditFolder;
+use Illuminate\Support\Facades\Auth;
 
 class FolderController extends Controller
 {
@@ -17,10 +18,9 @@ class FolderController extends Controller
      */
     public function showCreateForm()
     {
-        $first_folder = Folder::first();
-        return view('folders/create', [
-            'first_folder_id' => $first_folder->id,
-        ]);
+        $user = Auth::user();
+        $folder = $user->folders;
+        return view('folders/create', compact('folder'));
     }
 
     /**
@@ -33,9 +33,14 @@ class FolderController extends Controller
      */
     public function create(CreateFolder $request)
     {
+
         $folder = new Folder();
         $folder->title = $request->title;
-        $folder->save();
+        // $folder->save();
+        /** @var App\Models\User */
+        $user = Auth::user();
+        //ログインユーザに紐づけて保存する
+        $user->folders()->save($folder);
 
         return redirect()->route('tasks.index', [
             'id' => $folder->id,
@@ -51,7 +56,10 @@ class FolderController extends Controller
      */
     public function showEditForm($id)
     {
-        $folder = Folder::findOrFail($id);
+        /** @var App\Models\User */
+        $user = Auth::user();
+
+        $folder = $user->folders()->findOrFail($id);
 
         return view('folders/edit', [
             'folder_id' => $folder->id,
@@ -69,7 +77,9 @@ class FolderController extends Controller
      */
     public function edit(int $id, EditFolder $request)
     {
-        $folder = Folder::findOrFail($id);
+        /** @var App\Models\User */
+        $user = Auth::user();
+        $folder = $user->folders()->findOrFail($id);
         $folder->title = $request->title;
         $folder->save();
         return redirect()->route('tasks.index', [
@@ -86,7 +96,9 @@ class FolderController extends Controller
      */
     public function showDeleteForm(int $id)
     {
-        $folder = Folder::findOrFail($id);
+        /** @var \App\Models\User */
+        $user = Auth::user();
+        $folder = $user->folders()->findOrFail($id);
 
         return view('folders/delete', [
             'folder_id' => $folder->id,
@@ -102,9 +114,13 @@ class FolderController extends Controller
      */
     public function delete(int $id)
     {
-        $folder = Folder::findOrFail($id);
+        /** @var \App\Models\User */
+        $user = Auth::user();
+        $folder = $user->folders()->findOrFail($id);
+
         $folder->tasks()->delete();
         $folder->delete();
+
         $folder = Folder::first();
 
         return redirect()->route('tasks.index', [
