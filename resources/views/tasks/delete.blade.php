@@ -55,7 +55,7 @@
                             <p>上記の項目を削除しようとしています。本当によろしいでしょうか？</p>
                             <div class="text-right">
                                 <button type="button" class="btn btn-secondary" onclick="window.location='{{ route('tasks.index', ['id' => $task->folder_id]) }}'">キャンセル</button>
-                                <button type="submit" class="btn btn-primary">保存</button>
+                                <button type="submit" class="btn btn-primary">削除</button>
                             </div>
                         </form>
                     </div>
