@@ -44,7 +44,7 @@
                             </div>
                             <div class="text-right">
                                 <button type="button" class="btn btn-secondary" onclick="window.location='{{ route('tasks.index', ['id' => $folder_id]) }}'">キャンセル</button>
-                                <button type="submit" class="btn btn-primary">送信</button>
+                                <button type="submit" class="btn btn-primary">追加</button>
                             </div>
                         </form>
                     </div>
